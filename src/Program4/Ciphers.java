@@ -22,11 +22,16 @@ public class Ciphers {
         if (in.hasNextLine()) {
             nextLine = in.nextLine();
             for (int i = 0; i < nextLine.length(); i++, keyPosition++) {
-                if (keyPosition == keyLength) {
-                    keyPosition = 0;
+                if (Character.isAlphabetic(nextLine.charAt(i))) {
+                    if (keyPosition == keyLength) {
+                        keyPosition = 0;
+                    }
+                    keyInt = key.charAt(keyPosition) - 'a';
+                    cipherText += Util4.shiftUpByK(nextLine.charAt(i), keyInt);
                 }
-                keyInt = key.charAt(keyPosition) - 'a';
-                cipherText += Util4.shiftUpByK(nextLine.charAt(i), keyInt);
+                else {
+                    cipherText += " ";
+                }
             }
             out.println(cipherText);
         }
@@ -41,11 +46,16 @@ public class Ciphers {
         if (in.hasNextLine()) {
             nextLine = in.nextLine();
             for (int i = 0; i < nextLine.length(); i++, keyPosition++) {
-                if (keyPosition == keyLength) {
-                    keyPosition = 0;
+                if (Character.isAlphabetic(nextLine.charAt(i))) {
+                    if (keyPosition == keyLength) {
+                        keyPosition = 0;
+                    }
+                    keyInt = key.charAt(keyPosition) - 'a';
+                    decipherText += Util4.shiftDownByK(nextLine.charAt(i), keyInt);
                 }
-                keyInt = key.charAt(keyPosition) - 'a';
-                decipherText += Util4.shiftDownByK(nextLine.charAt(i), keyInt);
+                else {
+                    decipherText += " ";
+                }
             }
             out.println(decipherText);
         }

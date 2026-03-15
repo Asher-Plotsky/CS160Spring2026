@@ -15,16 +15,17 @@ public class Util4 {
     public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
     public static char shiftUpByK(char c, int k){
         int characterValue = c + k;
-        while(characterValue > ALPHABET.charAt(ALPHABET.length()-1)){
+        while (characterValue > ALPHABET.charAt(ALPHABET.length() - 1)) {
             characterValue -= NUM_LETTERS;
         }
-        return (char)characterValue;
+        return (char) characterValue;
     }
     public static char shiftDownByK(char c, int k){
         int characterValue = c - k;
-        while(characterValue < ALPHABET.charAt(0)){
+        while (characterValue < ALPHABET.charAt(0)) {
             characterValue += NUM_LETTERS;
         }
-        return (char)characterValue;
+        return (char) characterValue;
     }
+
 }
