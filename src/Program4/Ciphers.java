@@ -1,6 +1,6 @@
 /*
 Program 4 Ciphers
-Encodes and Decodes Messages Using Caesar Cipher.
+Encodes and decodes messages using the Caesar Cipher.
 CS160-03
 3/14/2026
 @author Asher Plotsky
@@ -13,6 +13,12 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 
 public class Ciphers {
+    /**
+     * Encodes a message based on the key provided
+     * @param in
+     * @param out
+     * @param key
+     */
     public static void encode(Scanner in, PrintWriter out, String key) {
         int keyLength = key.length();
         int keyPosition = 0;
@@ -37,6 +43,12 @@ public class Ciphers {
         }
     }
 
+    /**
+     * Decodes a message based on the key provided
+     * @param in
+     * @param out
+     * @param key
+     */
     public static void decode(Scanner in, PrintWriter out, String key) {
         int keyLength = key.length();
         int keyPosition = 0;
@@ -60,6 +72,12 @@ public class Ciphers {
             out.println(decipherText);
         }
     }
+
+    /**
+     * Calls encode or decode based on the command line arguments
+     * @param args
+     * @throws IOException
+     */
     public static void main (String[] args) throws IOException {
         Scanner in;
         PrintWriter out;
