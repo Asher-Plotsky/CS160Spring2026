@@ -14,10 +14,22 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Ciphers {
-    public static void main(String args[]){
+    public static void main(String args[]) throws IOException {
+        if (args.length != 2) {
+            System.err.println("Usage: encrypt/decrypt fileName");
+            System.exit(1);
+        }
+        if (!args[0].equals("encrypt/decrypt")) {
+            System.err.println("Usage: encrypt/decrypt fileName");
+            System.exit(1);
+        }
+        if (readFile(args[1]) == null){
+            System.err.println("File not found");
+            System.exit(1);
+        }
         try {
             RSAEncryption rsa = new RSAEncryption(61, 53, 7);
-            String plainText = readFile("plaintext.txt");
+            String plainText = readFile(args[1]);
             String encrypted = rsa.encrypt(plainText);
             writeFile("encrypted.txt", encrypted);
             System.out.println("Text encrypted, Key values: " + rsa.getN() + " " + rsa.getE() + " " + rsa.getD());
@@ -29,6 +41,9 @@ public class Ciphers {
     }
     public static String readFile(String fileName)throws IOException{
         BufferedReader br = new BufferedReader(new FileReader(fileName));
+        if (br ==  null){
+            return null;
+        }
         StringBuilder content = new StringBuilder();
         String line;
         while ((line = br.readLine()) != null){
