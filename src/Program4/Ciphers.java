@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileOutputStream;
+import java.io.File;
 
 public class Ciphers {
     /**
@@ -19,24 +20,23 @@ public class Ciphers {
      * @param out
      * @param key
      */
-    public static void encode(Scanner in, PrintWriter out, String key) {
+    public static void encrypt(Scanner in, PrintWriter out, String key) {
         int keyLength = key.length();
         int keyPosition = 0;
         int keyInt;
-        String cipherText = "";
         String nextLine = "";
-        if (in.hasNextLine()) {
+        while (in.hasNextLine()) {
+            String cipherText = "";
             nextLine = in.nextLine();
-            for (int i = 0; i < nextLine.length(); i++, keyPosition++) {
-                if (Character.isAlphabetic(nextLine.charAt(i))) {
-                    if (keyPosition == keyLength) {
-                        keyPosition = 0;
-                    }
-                    keyInt = key.charAt(keyPosition) - 'a';
-                    cipherText += Util4.shiftUpByK(nextLine.charAt(i), keyInt);
+            for (int i = 0; i < nextLine.length(); i++) {
+                char ch =  nextLine.charAt(i);
+                if (Character.isAlphabetic(ch)) {
+                    keyInt = Character.toLowerCase(key.charAt(keyPosition)) - 'a';
+                    cipherText += Util4.shiftUpByK(ch, keyInt);
+                    keyPosition = (keyPosition + 1) % keyLength;
                 }
                 else {
-                    cipherText += " ";
+                    cipherText += ch;
                 }
             }
             out.println(cipherText);
@@ -49,24 +49,26 @@ public class Ciphers {
      * @param out
      * @param key
      */
-    public static void decode(Scanner in, PrintWriter out, String key) {
+    public static void decrypt(Scanner in, PrintWriter out, String key) {
         int keyLength = key.length();
         int keyPosition = 0;
         int keyInt;
-        String decipherText = "";
         String nextLine = "";
-        if (in.hasNextLine()) {
+        while (in.hasNextLine()) {
+            String decipherText = "";
             nextLine = in.nextLine();
-            for (int i = 0; i < nextLine.length(); i++, keyPosition++) {
-                if (Character.isAlphabetic(nextLine.charAt(i))) {
+            for (int i = 0; i < nextLine.length(); i++) {
+                char ch =  nextLine.charAt(i);
+                if (Character.isAlphabetic(ch)) {
                     if (keyPosition == keyLength) {
                         keyPosition = 0;
                     }
-                    keyInt = key.charAt(keyPosition) - 'a';
-                    decipherText += Util4.shiftDownByK(nextLine.charAt(i), keyInt);
+                    keyInt = Character.toLowerCase(key.charAt(keyPosition)) - 'a';
+                    decipherText += Util4.shiftDownByK(ch, keyInt);
+                    keyPosition = (keyPosition + 1) % keyLength;
                 }
                 else {
-                    decipherText += " ";
+                    decipherText += ch;
                 }
             }
             out.println(decipherText);
@@ -79,23 +81,42 @@ public class Ciphers {
      * @throws IOException
      */
     public static void main (String[] args) throws IOException {
+        if (args.length != 3){
+            System.out.println("Wrong number of arguments");
+            return;
+        }
+        if (!args[0].equals("encrypt") && !args[0].equals("decrypt")) {
+            System.out.println("Wrong arguments");
+            return;
+        }
+        File file = new File(args[2]);
+        if (!file.exists()) {
+            System.out.println("File does not exist");
+            return;
+        }
+
         Scanner in;
         PrintWriter out;
-        if (args[0].equals("encode")) {
+        if (args[0].equals("encrypt")) {
+            String fileName = file.getName();
+            int split = fileName.lastIndexOf('.');
+            String returnFile =  fileName.substring(0, split + 1) + "crypt";
             in = new Scanner(new FileInputStream(args[2]));
-            out = new PrintWriter(new FileOutputStream("message.crypt"));
-            Ciphers.encode(in, out, args[1]);
-        }
-        else if (args[0].equals("decode")) {
+            out = new PrintWriter(new FileOutputStream(returnFile));
+            Ciphers.encrypt(in, out, args[1]);
+        } else if (args[0].equals("decrypt")) {
+            String fileName = file.getName();
+            int split = fileName.lastIndexOf('.');
+            String returnFile =  fileName.substring(0, split + 1) + "decrypt";
             in = new Scanner(new FileInputStream(args[2]));
-            out = new PrintWriter(new FileOutputStream("message.decrypt"));
-            Ciphers.decode(in, out, args[1]);
-        }
-        else {
+            out = new PrintWriter(new FileOutputStream(returnFile));
+            Ciphers.decrypt(in, out, args[1]);
+        } else {
             throw new IllegalArgumentException("Wrong arguments");
         }
         in.close();
         out.close();
         System.out.println("Finished");
+
     }
 }
