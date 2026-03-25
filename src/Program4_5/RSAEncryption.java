@@ -5,16 +5,16 @@ CS160-03
 3/19/2026
 @author Asher Plotsky
 */
-package Program4_2;
+package Program4_5;
 
 import java.math.BigInteger;
 
 public class RSAEncryption {
-    private int p;
-    private int q;
-    private int n;
-    private int e;
-    private int d;
+    private BigInteger p;
+    private BigInteger q;
+    private BigInteger n;
+    private BigInteger e;
+    private BigInteger d;
 
     /**
      * Assigns values to variables.
@@ -23,10 +23,10 @@ public class RSAEncryption {
      * @param e
      */
     public RSAEncryption(int p, int q, int e) {
-        this.p = p;
-        this.q = q;
-        this.e = e;
-        n = p * q;
+        this.p = BigInteger.valueOf(p);
+        this.q = BigInteger.valueOf(q);
+        this.e = BigInteger.valueOf(e);
+        n = BigInteger.valueOf(p * q);
         d = this.calculatePrivateKey();
     }
 
@@ -34,12 +34,10 @@ public class RSAEncryption {
      * Calculates value of int d based on ints p, q, and e
      * @return
      */
-    private int calculatePrivateKey(){
-        BigInteger phi = BigInteger.valueOf((p - 1)*(q-1));
-        BigInteger bigE = BigInteger.valueOf(e);
-        BigInteger bigD = BigInteger.valueOf(d);
-        bigD = bigE.modInverse(phi);
-        return bigD.intValue();
+    private BigInteger calculatePrivateKey(){
+        BigInteger phi = BigInteger.valueOf((p.intValue() - 1) * (q.intValue() - 1));
+        d = e.modInverse(phi);
+        return d;
 
     }
 
@@ -50,11 +48,11 @@ public class RSAEncryption {
      */
     public String encrypt(String message){
         BigInteger M = BigInteger.valueOf((int)message.charAt(0));
-        BigInteger C = M.modPow(BigInteger.valueOf(e), BigInteger.valueOf(n));
+        BigInteger C = M.modPow(e, n);
         String encrypted = C.toString();
         for(int i = 1; i < message.length(); i++){
             M = BigInteger.valueOf((int)message.charAt(i));
-            C = M.modPow(BigInteger.valueOf(e), BigInteger.valueOf(n));
+            C = M.modPow(e, n);
             encrypted = encrypted + " " + C.toString();
         }
         return encrypted;
@@ -70,49 +68,49 @@ public class RSAEncryption {
         String[] ciphertexts = ciphertext.trim().split(" ");
         for(String c : ciphertexts){
             BigInteger C = BigInteger.valueOf(Integer.parseInt(c));
-            BigInteger M = C.modPow(BigInteger.valueOf(d), BigInteger.valueOf(n));
+            BigInteger M = C.modPow(d, n);
             decrypted = decrypted + (char) M.intValue();
         }
         return decrypted;
     }
 
     /**
-     * Returns value of int n
+     * Returns value of BigInteger n
      * @return
      */
     public int getN(){
-        return this.n;
+        return n.intValue();
     }
 
     /**
-     * Returns value of int e
+     * Returns value of BigInteger e
      * @return
      */
     public int getE(){
-        return this.e;
+        return e.intValue();
     }
 
     /**
-     * Returns value of int d
+     * Returns value of BigInteger d
      * @return
      */
     public int getD(){
-        return this.d;
+        return d.intValue();
     }
 
     /**
-     * Sets value of int p
+     * Sets value of BigInteger p
      * @param p
      */
     public void setP(int p){
-        this.p = p;
+        this.p = BigInteger.valueOf(p);
     }
 
     /**
-     * Sets value of int q
+     * Sets value of BigInteger q
      * @param q
      */
     public void setQ(int q){
-        this.q = q;
+        this.q = BigInteger.valueOf(q);
     }
 }
