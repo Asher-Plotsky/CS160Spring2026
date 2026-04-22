@@ -33,7 +33,7 @@ public class WaitLine {
                 numberOfArrivals++;
                 int transactionTime = (int) (rand.nextDouble() * maxTransactionTime + 1);
                 line.enqueue(new Customer(clockTime, transactionTime, numberOfArrivals));
-                System.out.println("Program6.Customer " + numberOfArrivals + " enters line at time " + clockTime + ", Transaction time is " + transactionTime);
+                System.out.println("Customer " + numberOfArrivals + " enters line at time " + clockTime + ", Transaction time is " + transactionTime);
             }
             if (transactionTimeLeft > 0){
                 --transactionTimeLeft;
@@ -44,7 +44,7 @@ public class WaitLine {
                 int waitTime = clockTime - nextCustomer.getArrivalTime();
                 totalTimeWaited = totalTimeWaited + waitTime;
                 numberServed++;
-                System.out.println("Program6.Customer " + nextCustomer.getCustomerNumber() + " begins service at time " + clockTime + ". Time waited is " + waitTime);
+                System.out.println("Customer " + nextCustomer.getCustomerNumber() + " begins service at time " + clockTime + ". Time waited is " + waitTime);
             }
             clockTime++;
         }
