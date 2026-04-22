@@ -1,11 +1,13 @@
+package Program6;
 /*
-Program 6 Generic Methods
-Use Generics
+Program 6 Queue Application
+Use a queue to simulate a drive through line.
 CS160-03
-4/7/2026
+4/16/2026
 @author Asher Plotsky
 */
-package Program6;
+
+import java.util.Random;
 
 public class WaitLine {
     private QueueInterface<Customer> line;
@@ -13,21 +15,45 @@ public class WaitLine {
     private int numberServed;
     private int totalTimeWaited;
     public WaitLine(){
+        line = new LinkedQueue();
         reset();
     }
     final public void reset(){
-        System.out.println();
         numberOfArrivals = 0;
         numberServed = 0;
         totalTimeWaited = 0;
+        line.clear();
     }
     public void simulate(int duration, double arrivalProbability, int maxTransactionTime, long seed) throws EmptyQueueException{
-
+        Random rand = new Random(seed);
+        int clockTime = 0;
+        int transactionTimeLeft = 0;
+        while(clockTime < duration){
+            if(rand.nextDouble() < arrivalProbability){
+                numberOfArrivals++;
+                int transactionTime = (int) (rand.nextDouble() * maxTransactionTime + 1);
+                line.enqueue(new Customer(clockTime, transactionTime, numberOfArrivals));
+                System.out.println("Program6.Customer " + numberOfArrivals + " enters line at time " + clockTime + ", Transaction time is " + transactionTime);
+            }
+            if (transactionTimeLeft > 0){
+                --transactionTimeLeft;
+            }
+            else if (!line.isEmpty()){
+                Customer nextCustomer = line.dequeue();
+                transactionTimeLeft = nextCustomer.getTransactionTime() - 1;
+                int waitTime = clockTime - nextCustomer.getArrivalTime();
+                totalTimeWaited = totalTimeWaited + waitTime;
+                numberServed++;
+                System.out.println("Program6.Customer " + nextCustomer.getCustomerNumber() + " begins service at time " + clockTime + ". Time waited is " + waitTime);
+            }
+            clockTime++;
+        }
     }
     public void displayResults(){
-        System.out.print("Served: " + numberServed);
-        System.out.print("Wait time: " + totalTimeWaited);
-        System.out.print("Average wait time: " + (totalTimeWaited/numberOfArrivals));
-        System.out.print("Left in line: " + (numberOfArrivals - numberServed));
+        System.out.println();
+        System.out.println("Number served = " + numberServed);
+        System.out.println("Total time waited = " + totalTimeWaited);
+        System.out.printf("Average time waited = %.1f\n", (double) totalTimeWaited/numberServed);
+        System.out.println("Number left in inline " + (numberOfArrivals - numberServed));
     }
 }

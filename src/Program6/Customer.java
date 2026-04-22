@@ -1,11 +1,11 @@
+package Program6;
 /*
-Program 6 Generic Methods
-Use Generics
+Program 6 Queue Application
+Use a queue to simulate a drive through line.
 CS160-03
-4/7/2026
+4/16/2026
 @author Asher Plotsky
 */
-package Program6;
 
 public class Customer {
     private int arrivalTime;
