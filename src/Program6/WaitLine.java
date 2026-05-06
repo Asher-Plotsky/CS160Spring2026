@@ -54,6 +54,6 @@ public class WaitLine {
         System.out.println("Number served = " + numberServed);
         System.out.println("Total time waited = " + totalTimeWaited);
         System.out.printf("Average time waited = %.1f\n", (double) totalTimeWaited/numberServed);
-        System.out.println("Number left in inline " + (numberOfArrivals - numberServed));
+        System.out.println("Number left in line " + (numberOfArrivals - numberServed));
     }
 }
